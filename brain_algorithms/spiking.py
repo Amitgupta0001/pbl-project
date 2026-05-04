@@ -217,6 +217,7 @@ class SpikingNeuralNetwork:
                 spike_trains[t, i] = self.neurons[i].step(total_current[i], dt)
                 voltages[t, i] = self.neurons[i].v
                 if spike_trains[t, i]:
+                    self.neurons[i].spike_times.append(t * dt)
                     voltages[t, i] = self.neurons[i].v_threshold + 20
 
         return voltages, spike_trains

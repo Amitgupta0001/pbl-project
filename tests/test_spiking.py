@@ -82,6 +82,17 @@ class TestSpikingNeuralNetwork:
         assert voltages.shape == (500, 3)
         assert spike_trains.shape == (500, 3)
 
+    def test_get_spike_times_populated(self) -> None:
+        np.random.seed(42)
+        snn = SpikingNeuralNetwork(n_neurons=3, connectivity=0.3)
+        external = np.ones((2000, 3)) * 3.0
+        _, spike_trains = snn.simulate(external, dt=0.1)
+        spike_times = snn.get_spike_times()
+        total_from_trains = int(np.sum(spike_trains))
+        total_from_times = sum(len(st) for st in spike_times)
+        assert total_from_times == total_from_trains
+        assert total_from_times > 0
+
     def test_excitatory_inhibitory_ratio(self) -> None:
         np.random.seed(42)
         snn = SpikingNeuralNetwork(n_neurons=100, connectivity=0.3)
